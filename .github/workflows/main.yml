@@ -31,7 +31,7 @@ jobs:
             else
               echo "📦 Cloning the repo..."
               git clone https://github.com/mostafahossam168/E-learning.git
-              cd public_html
+              cd E-learning
 
               echo "🔑 Generating app key"
               php ~/composer.phar install --no-interaction --prefer-dist
