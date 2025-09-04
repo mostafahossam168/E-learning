@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\StatusUser;
+use App\Enums\TypeUser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'type',
+        'status',
+        'phone',
+        'image'
+    ];
+
+    public function ScopeActive($q)
+    {
+        return $q->where('status', 1);
+    }
+    public function ScopeInActive($q)
+    {
+        return $q->where('status', 0);
+    }
+    public function ScopeAdmins($q)
+    {
+        return $q->where('type', TypeUser::ADMIN);
+    }
+    public function ScopeTeachers($q)
+    {
+        return $q->where('type', TypeUser::TEACHER);
+    }
+    public function ScopeStudents($q)
+    {
+        return $q->where('type', TypeUser::STUDENT);
+    }
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'type' => TypeUser::class,
+            'status' => StatusUser::class,
+        ];
+    }
+}
