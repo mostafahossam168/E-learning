@@ -3,15 +3,19 @@
 ])
 @section('contant')
     <div class="main-side">
-        <div class="main-title">
-            <div class="small">الرئيسية</div>/
-            <div class="small">الصلاحيات</div>/
-            <div class="large">اضافة صلاحيه</div>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="main-title">
+                <div class="small">الرئيسية</div>/
+                <div class="small">الصلاحيات</div>/
+                <div class="large">اضافة صلاحيه</div>
+            </div>
+            <div class="btn-holder">
+                <a class="main-btn btn-main-color fs-13px" href="{{ route('dashboard.roles.index') }}">رجوع <i
+                        class="fa-solid fa-arrow-left fs-13px"></i>
+                </a>
+            </div>
         </div>
-
-
         <div class="row w-100 mx-0 p-3 mb-5 mt-5  bg-white">
-            <a class="main-btn btn-main-color" href="{{ route('dashboard.roles.index') }}">عرض كل الصلاحيات</a>
             <x-alert-component></x-alert-component>
             <form action="{{ route('dashboard.roles.store') }}" method="POST">
                 @csrf

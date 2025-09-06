@@ -4,7 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Enums\TypeUser;
 use Illuminate\Http\Request;
-use App\interfaces\AdminInterface;
+use App\Interfaces\AdminInterface;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AdminRequest;
 use App\Http\Controllers\Controller;

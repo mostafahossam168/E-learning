@@ -19,7 +19,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet" />
-
+    <link rel="shortcut icon" type="image/jpg" href="{{ display_file(setting('fav')) }}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @yield('css')
 </head>
 
@@ -35,8 +36,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('dashboard/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/all.min.js') }}"></script>
+    <script data-navigate-once src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
-    @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

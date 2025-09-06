@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CourseTableSeeder;
+use Database\Seeders\LessonTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +25,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SettingSeeder::class,
             PermissionTableSeeder::class,
+            CategoryTableSeeder::class,
+            CourseTableSeeder::class,
+            LessonTableSeeder::class,
         ]);
     }
 }

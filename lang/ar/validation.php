@@ -278,5 +278,7 @@ return [
         'winner'                   => 'الفائز',
         'work'                     => 'العمل',
         'year'                     => 'السنة',
+        'category_id'                     => 'القسم',
+        'teacher_if'                     => 'المعلم',
     ],
 ];

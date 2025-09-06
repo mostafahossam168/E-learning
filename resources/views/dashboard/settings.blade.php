@@ -124,6 +124,7 @@
                     <div class="inp-holder">
                         <label class="special-label" for="emailStatus">تفعيل ارسال البريد الالكتروني</label>
                         <select name="" id="emailStatus" class="form-select select-setting">
+                            <option value="">-- اختر -- </option>
                             <option value="1">مفعل</option>
                             <option value="0">غير مفعل</option>
                         </select>
@@ -133,8 +134,9 @@
                     <div class="inp-holder">
                         <label class="special-label" for="siteStatus">حالة الموقع</label>
                         <select name="website_status" id="siteStatus" class="form-select select-setting">
-                            <option value="1">مفعل</option>
-                            <option value="0">غير مفعل</option>
+                            <option value="">-- اختر -- </option>
+                            <option value="1" @selected(setting('website_status') == 1)>مفعل</option>
+                            <option value="0" @selected(setting('website_status') == 0)>غير مفعل</option>
                         </select>
                     </div>
                 </div>
@@ -165,13 +167,11 @@
                     <img style="width: 70px; height:70px" src="{{ display_file(setting('fav')) }}" alt=""
                         srcset="">
                 </div>
-                @if (!setting('website_status'))
-                    <div class="col-12 col-md-8">
-                        <label class="special-label" for="siteLogo">رسالة تعطيل الموقع</label>
-                        <textarea name="maintainance_message" id="" value="" rows="5" class="form-control"
-                            placeholder="نعتذر الموقع مغلق للصيانة ...">{{ setting('maintainance_message') }}</textarea>
-                    </div>
-                @endif
+                <div class="col-12 col-md-8">
+                    <label class="special-label" for="siteLogo">رسالة تعطيل الموقع</label>
+                    <textarea name="maintainance_message" id="" value="" rows="5" class="form-control"
+                        placeholder="نعتذر الموقع مغلق للصيانة ...">{{ setting('maintainance_message') }}</textarea>
+                </div>
             </div>
         </form>
     </div>

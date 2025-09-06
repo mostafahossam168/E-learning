@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\dashboard\AdminController;
+use App\Http\Controllers\Dashboard\ActiveController;
+use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\AuthController;
-use App\Http\Controllers\dashboard\RoleController;
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\CourseController;
+use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
-use App\Http\Controllers\dashboard\StudentController;
-use App\Http\Controllers\dashboard\TeacherController;
+use App\Http\Controllers\Dashboard\StudentController;
+use App\Http\Controllers\Dashboard\TeacherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +24,9 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
     Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
     Route::resource('roles', RoleController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('courses', CourseController::class);
+    Route::resource('lessons', LessonController::class);
+    Route::get('/actives', [ActiveController::class, 'index'])->name('actives.index');
+    Route::delete('/delete/{id}', [ActiveController::class, 'destroy'])->name('actives.destroy');
 });

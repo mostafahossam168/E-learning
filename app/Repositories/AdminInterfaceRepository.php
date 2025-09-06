@@ -3,14 +3,24 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\interfaces\AdminInterface;
+use App\Interfaces\AdminInterface;
 use Illuminate\Support\Facades\DB;
 
 class AdminInterfaceRepository implements AdminInterface
 {
     public function index()
     {
-        return User::admins()->latest()->paginate(20);
+        return User::where(function ($q) {
+            if (request('search')) {
+                $q->where('name', 'LIKE', '%' . request('search') . '%');
+            }
+            if (request('status') && request('status') == 'yes') {
+                $q->active();
+            }
+            if (request('status') == 'no') {
+                $q->inactive();
+            }
+        })->admins()->latest()->paginate(20);
     }
     public function show($id)
     {

@@ -10,19 +10,22 @@
         <div class="bar-obtions d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
             <div class="row flex-fill g-3">
                 <div class="d-flex align-items-center gap-2 mt-2">
-                    <a href="{{ route('dashboard.admins.index') }}" class="main-btn btn-sm bg-primary">الكل :
-                        {{ Spatie\Permission\Models\Role::count() }}</a>
                     @can('create_roles')
-                        <a href="{{ route('dashboard.roles.create') }}" class="main-btn btn-purple btn btn-sm"><i
-                                class="fas fa-plus"></i> اضافة صلاحية جديدة
+                        <a href="{{ route('dashboard.roles.create') }}" class="main-btn "><i class="fas fa-plus"></i> اضافة
                         </a>
                     @endcan
+                    <a href="{{ route('dashboard.admins.index') }}" class="main-btn btn-main-color">الكل :
+                        {{ Spatie\Permission\Models\Role::count() }}</a>
                 </div>
             </div>
             <div class="box-search">
-                <img src="img/icons/search.png" alt="icon" />
-                <input type="search" name="" id="" placeholder="بحث" />
+                <form action="">
+                    <img src="{{ asset('dashboard/img/icons/search.png') }}" alt="icon" />
+                    <input type="search" id="" value="{{ request('search') }}" name="search"
+                        placeholder="@lang('Search')" />
+                </form>
             </div>
+
         </div>
         <x-alert-component></x-alert-component>
         <div class="table-responsive">

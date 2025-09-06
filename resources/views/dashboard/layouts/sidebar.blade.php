@@ -6,12 +6,12 @@
         <li class="list-item {{ request()->routeIs('dashboard.home') ? 'active' : '' }}">
             <a href="{{ route('dashboard.home') }}">
                 <div>
-                    <i class="fa-solid fa-grip"></i>
+                    <i class="fa-solid fa-house"></i>
                     الرئيسية
                 </div>
             </a>
         </li>
-        <li class="list-item">
+        {{-- <li class="list-item">
             <a href="index.html">
                 <div>
                     <i class="fa-solid fa-grip"></i>
@@ -37,7 +37,7 @@
                     </div>
                 </a>
             </li>
-        </div>
+        </div> --}}
         @can('read_settings')
             <li class="list-item {{ request()->routeIs('dashboard.settings') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.settings') }}">
@@ -52,7 +52,7 @@
             <li class="list-item {{ request()->routeIs('dashboard.admins.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.admins.index') }}">
                     <div>
-                        <i class="fa-solid fa-grip"></i>
+                        <i class="fa-solid fa-users"></i>
                         المشرفين
                     </div>
                 </a>
@@ -62,7 +62,7 @@
             <li class="list-item {{ request()->routeIs('dashboard.teachers.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.teachers.index') }}">
                     <div>
-                        <i class="fa-solid fa-grip"></i>
+                        <i class="fa-solid fa-person-chalkboard"></i>
                         المعلمين
                     </div>
                 </a>
@@ -72,7 +72,7 @@
             <li class="list-item {{ request()->routeIs('dashboard.students.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.students.index') }}">
                     <div>
-                        <i class="fa-solid fa-grip"></i>
+                        <i class="fa-solid fa-user-tie"></i>
                         الطلاب
                     </div>
                 </a>
@@ -82,8 +82,48 @@
             <li class="list-item {{ request()->routeIs('dashboard.roles.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.roles.index') }}">
                     <div>
-                        <i class="fa-solid fa-grip"></i>
+                        <i class="fa-solid fa-user-shield"></i>
                         الصلاحيات
+                    </div>
+                </a>
+            </li>
+        @endcan
+        @can('read_categories')
+            <li class="list-item {{ request()->routeIs('dashboard.categories.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.categories.index') }}">
+                    <div>
+                        <i class="fa-solid fa-sitemap"></i>
+                        الاقسام
+                    </div>
+                </a>
+            </li>
+        @endcan
+        @can('read_courses')
+            <li class="list-item {{ request()->routeIs('dashboard.courses.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.courses.index') }}">
+                    <div>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        الكورسات
+                    </div>
+                </a>
+            </li>
+        @endcan
+        @can('read_lessons')
+            <li class="list-item {{ request()->routeIs('dashboard.lessons.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.lessons.index') }}">
+                    <div>
+                        <i class="fa-solid fa-chalkboard-teacher"></i>
+                        الدروس
+                    </div>
+                </a>
+            </li>
+        @endcan
+        @can('read_actives')
+            <li class="list-item {{ request()->routeIs('dashboard.actives.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.actives.index') }}">
+                    <div>
+                        <i class="fa-solid fa-chalkboard-teacher"></i>
+                        الجلسات النشطة
                     </div>
                 </a>
             </li>

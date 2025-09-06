@@ -10,23 +10,29 @@
         <div class="bar-obtions d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
             <div class="row flex-fill g-3">
                 <div class="d-flex align-items-center gap-2 mt-2">
-                    <a href="{{ route('dashboard.admins.index') }}" class="main-btn btn-sm bg-primary">الكل :
-                        {{ App\Models\User::admins()->count() }}</a>
-                    <a href="" class="main-btn btn-sm bg-success">مفعلين :
-                        {{ App\Models\User::admins()->active()->count() }}</a>
-                    <a href="" class="main-btn btn-sm  bg-danger">غير مفعلين :
-                        {{ App\Models\User::admins()->inactive()->count() }}</a>
                     @can('create_admins')
-                        <a href="{{ route('dashboard.admins.create') }}" class="main-btn btn-purple btn btn-sm"><i
-                                class="fas fa-plus"></i> اضافة مشرف جديد
+                        <a href="{{ route('dashboard.admins.create') }}" class="main-btn "><i class="fas fa-plus"></i> اضافة
                         </a>
                     @endcan
+                    <a href="{{ route('dashboard.admins.index') }}" class="main-btn btn-main-color">الكل :
+                        {{ App\Models\User::admins()->count() }}</a>
+                    <a href="{{ route('dashboard.admins.index', ['status' => 'yes']) }}"
+                        class="main-btn btn-sm bg-success">مفعلين :
+                        {{ App\Models\User::admins()->active()->count() }}</a>
+                    <a href="{{ route('dashboard.admins.index', ['status' => 'no']) }}"
+                        class="main-btn btn-sm  bg-danger">غير
+                        مفعلين :
+                        {{ App\Models\User::admins()->inactive()->count() }}</a>
                 </div>
             </div>
             <div class="box-search">
-                <img src="img/icons/search.png" alt="icon" />
-                <input type="search" name="" id="" placeholder="بحث" />
+                <form action="">
+                    <img src="{{ asset('dashboard/img/icons/search.png') }}" alt="icon" />
+                    <input type="search" id="" value="{{ request('search') }}" name="search"
+                        placeholder="@lang('Search')" />
+                </form>
             </div>
+
         </div>
         <x-alert-component></x-alert-component>
         <div class="table-responsive">
@@ -47,8 +53,8 @@
                     @foreach ($items as $item)
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
-                            <td> <img style="width: 60px; height:60px" src="{{ display_file($item->image) }}" alt=""
-                                    srcset=""></td>
+                            <td> <img style="width: 60px; height:60px" src="{{ display_file($item->image) }}"
+                                    alt="" srcset=""></td>
                             <td> {{ $item->name }}</td>
                             <td> {{ $item->email }}</td>
                             <td> {{ $item->phone }}</td>

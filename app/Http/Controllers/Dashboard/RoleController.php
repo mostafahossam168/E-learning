@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Requests\RoleRequest;
 use App\Interfaces\RoleInterface;
+use App\Repositories\RoleInterfaceRepository;
 use Illuminate\Http\Request;
 
 class RoleController extends \Illuminate\Routing\Controller

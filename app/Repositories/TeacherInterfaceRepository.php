@@ -10,7 +10,19 @@ class TeacherInterfaceRepository implements TeacherInterface
 {
     public function index()
     {
-        return User::teachers()->latest()->paginate(20);
+        return User::where(function ($q) {
+            if (request('search')) {
+                $q->where('name', 'LIKE', '%' . request('search') . '%')
+                    ->orWhere('email', 'LIKE', '%' . request('search') . '%')
+                    ->orWhere('phone', 'LIKE', '%' . request('search') . '%');
+            }
+            if (request('status') && request('status') == 'yes') {
+                $q->active();
+            }
+            if (request('status') == 'no') {
+                $q->inactive();
+            }
+        })->teachers()->latest()->paginate(20);
     }
     public function show($id)
     {

@@ -7,6 +7,7 @@ use App\Http\Requests\StudentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Interfaces\StudentInterface;
+use App\Repositories\StudentInterfaceRepository;
 
 class StudentController extends Controller
 {
