@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Api;
 
+use App\Interfaces\Api\ApiAuthInterface;
 use App\Models\Otp;
 use App\Models\User;
-use App\Interfaces\Api\OtpInterface;
 
-class OtpInterfaceRepository implements OtpInterface
+class ApiAuthInterfaceRepository implements ApiAuthInterface
 {
     public function register($data)
     {
@@ -16,6 +16,16 @@ class OtpInterfaceRepository implements OtpInterface
     public function user($phone)
     {
         return User::students()->where('phone', $phone)->first();
+    }
+
+    public function profile()
+    {
+        return  auth('sanctum')->user();
+    }
+
+    public function updateProfile($data)
+    {
+        auth('sanctum')->user()->update($data);
     }
 
     public function sendOtp(array $data, int $minutes = 60)

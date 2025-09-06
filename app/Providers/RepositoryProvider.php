@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Interfaces\ActiveInterface;
 use App\Interfaces\AdminInterface;
+use App\Interfaces\Api\ApiAuthInterface;
+use App\Interfaces\Api\ApiCourseInterface;
 use App\Interfaces\Api\OtpInterface;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CourseInterface;
@@ -13,6 +15,8 @@ use App\Interfaces\StudentInterface;
 use App\Interfaces\TeacherInterface;
 use App\Repositories\ActiveInterfaceRepository;
 use App\Repositories\AdminInterfaceRepository;
+use App\Repositories\Api\ApiAuthInterfaceRepository;
+use App\Repositories\Api\ApiCourseInterfaceRepository;
 use App\Repositories\Api\OtpInterfaceRepository;
 use App\Repositories\CategoryInterfaceRepository;
 use App\Repositories\CourseInterfaceRepository;
@@ -42,6 +46,8 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(LessonInterface::class, LessonInterfaceRepository::class);
         $this->app->bind(CourseInterface::class, CourseInterfaceRepository::class);
         $this->app->bind(ActiveInterface::class, ActiveInterfaceRepository::class);
-        $this->app->bind(OtpInterface::class, OtpInterfaceRepository::class);
+        //API
+        $this->app->bind(ApiAuthInterface::class, ApiAuthInterfaceRepository::class);
+        $this->app->bind(ApiCourseInterface::class, ApiCourseInterfaceRepository::class);
     }
 }

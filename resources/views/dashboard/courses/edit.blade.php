@@ -76,7 +76,7 @@
                         الحالة</label>
                     <select name="status" id="" class="form-select select-setting">
                         @foreach (collect(\App\enums\StatusCourse::cases())->toArray() as $status)
-                            <option value="{{ $status }}">
+                            <option value="{{ $status }}" @selected($item->status == $status)>
                                 {{ $status->name() }}
                             </option>
                         @endforeach

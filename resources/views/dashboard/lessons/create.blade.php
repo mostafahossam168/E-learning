@@ -49,6 +49,7 @@
                     <label class="special-label" for="tax">
                         الحالة</label>
                     <select name="status" id="" class="form-select select-setting">
+                        <option value="">-- اختر --</option>
                         @foreach (collect(\App\enums\StatusLesson::cases())->toArray() as $status)
                             <option value="{{ $status }}">
                                 {{ $status->name() }}
