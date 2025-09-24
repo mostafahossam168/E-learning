@@ -6,6 +6,9 @@ use App\Interfaces\ActiveInterface;
 use App\Interfaces\AdminInterface;
 use App\Interfaces\Api\ApiAuthInterface;
 use App\Interfaces\Api\ApiCourseInterface;
+use App\Interfaces\Api\ApiEnrollmentInterface;
+use App\Interfaces\Api\ApiReviewInterface;
+use App\Interfaces\Api\FavoriteInterface;
 use App\Interfaces\Api\OtpInterface;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\ContactInterface;
@@ -19,6 +22,9 @@ use App\Repositories\ActiveInterfaceRepository;
 use App\Repositories\AdminInterfaceRepository;
 use App\Repositories\Api\ApiAuthInterfaceRepository;
 use App\Repositories\Api\ApiCourseInterfaceRepository;
+use App\Repositories\Api\ApiEnrollmentInterfaceRepository;
+use App\Repositories\Api\ApiReviewInterfaceRepository;
+use App\Repositories\Api\FavoriteInterfaceRepository;
 use App\Repositories\Api\OtpInterfaceRepository;
 use App\Repositories\CategoryInterfaceRepository;
 use App\Repositories\ContactInterfaceRepository;
@@ -55,5 +61,8 @@ class RepositoryProvider extends ServiceProvider
         //API
         $this->app->bind(ApiAuthInterface::class, ApiAuthInterfaceRepository::class);
         $this->app->bind(ApiCourseInterface::class, ApiCourseInterfaceRepository::class);
+        $this->app->bind(ApiEnrollmentInterface::class, ApiEnrollmentInterfaceRepository::class);
+        $this->app->bind(FavoriteInterface::class, FavoriteInterfaceRepository::class);
+        $this->app->bind(ApiReviewInterface::class, ApiReviewInterfaceRepository::class);
     }
 }

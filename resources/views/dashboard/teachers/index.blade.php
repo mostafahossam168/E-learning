@@ -61,7 +61,8 @@
                             <td> {{ $item->phone }}</td>
                             <td> <span class="badge {{ $item->status->color() }}">{{ $item->status->name() }}</span> </td>
                             <td> <span class="badge bg-secondary ">{{ $item->roles->first()?->name }}</span> </td>
-                            <td><a href="#" class="btn btn-sm btn-info">0</a></td>
+                            <td><a href="#" class="btn btn-sm btn-info">{{ $item->teacherCourses()->count() }}</a>
+                            </td>
                             <td>
                                 <div class="btn-holder d-flex align-items-center gap-3">
                                     @can('update_teachers')

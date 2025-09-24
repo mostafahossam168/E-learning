@@ -4,23 +4,45 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\SettingsController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::post('/send-otp', [AuthController::class, 'sendOtp']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/send-otp',  'sendOtp');
+    Route::post('/verify-otp',  'verifyOtp');
+    Route::post('/register',  'register');
+});
 Route::middleware('auth:sanctum')->group(function () {
     //Profile && Logout
-    Route::get('/profile', [AuthController::class, 'profile']);
-    Route::post('/update-profile', [AuthController::class, 'updateProfile']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::controller(AuthController::class)->group(function () {
+        Route::get('/profile', 'profile');
+        Route::post('/update-profile', 'updateProfile');
+        Route::post('/logout', 'logout');
+    });
     // Courses
-    Route::prefix('courses')->group(function () {
-        Route::get('/index', [CourseController::class, 'index']);
-        Route::get('/show/{id}', [CourseController::class, 'show']);
+    Route::controller(CourseController::class)->prefix('courses')->group(function () {
+        Route::get('/index', 'index');
+        Route::get('/show/{id}', 'show');
+    });
+    // enrollments
+    Route::controller(EnrollmentController::class)->prefix('enrollments')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/store', 'store');
+    });
+    // Favorites
+    Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/toggle', 'toggle');
+    });
+    // Reviews
+    Route::controller(ReviewController::class)->prefix('reviews')->group(function () {
+        Route::post('/store', 'store');
+        Route::post('/delete/{id}', 'destroy');
     });
     //Settings
     Route::get('/settings', [SettingsController::class, 'index']);

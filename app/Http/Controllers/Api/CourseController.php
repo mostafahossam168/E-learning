@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\CourseResource;
-use App\Interfaces\Api\ApiCourseInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseResource;
+use App\Http\Resources\ShowCourseResource;
+use App\Interfaces\Api\ApiCourseInterface;
 
 class CourseController extends Controller
 {
@@ -27,6 +28,6 @@ class CourseController extends Controller
         if (!$item) {
             return    $this->returnError('العنصر غير موجود', 404);
         }
-        return $this->returnData(new CourseResource($item));
+        return $this->returnData(new ShowCourseResource($item));
     }
 }

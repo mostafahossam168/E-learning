@@ -33,6 +33,23 @@ class Course extends Model
         return $this->hasMany(Lesson::class);
     }
 
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'student_id')->withPivot('status')->withTimestamps();
+    }
+
+
+
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorites',  'course_id', 'student_id');
+    }
+
+    public function reviews()
+    {
+        return $this->belongsToMany(User::class, 'reviews', 'course_id', 'student_id')->withPivot(['comment', 'rate', 'status'])->withTimestamps();
+    }
+
     public function casts(): array
     {
         return [

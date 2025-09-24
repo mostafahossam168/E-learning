@@ -32,6 +32,8 @@ class User extends Authenticatable
         'image'
     ];
 
+
+
     public function ScopeActive($q)
     {
         return $q->where('status', 1);
@@ -51,6 +53,27 @@ class User extends Authenticatable
     public function ScopeStudents($q)
     {
         return $q->where('type', TypeUser::STUDENT);
+    }
+
+    public function teacherCourses()
+    {
+        return $this->hasMany(Course::class, 'teacher_id');
+    }
+
+
+    public function studentCourses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments', 'student_id', 'course_id')->withPivot('status')->withTimestamps();
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Course::class, 'favorites', 'student_id', 'course_id');
+    }
+
+    public function reviews()
+    {
+        return $this->belongsToMany(Course::class, 'reviews', 'student_id', 'course_id')->withPivot(['comment', 'rate', 'status'])->withTimestamps();
     }
 
     /**
