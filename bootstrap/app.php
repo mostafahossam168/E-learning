@@ -12,9 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__ . '/../routes/api.php',
         health: '/up',
         then: function () {
-            Route::middleware('web')->prefix('dashboard')
+            Route::middleware(['web', 'check_website'])->prefix('dashboard')
                 ->name('dashboard.')->group(base_path('routes/dashboard.php'));
-            Route::middleware('web')->prefix('teacher/')
+            Route::middleware(['web', 'check_website'])->prefix('teacher/')
                 ->name('teacher.')->group(base_path('routes/teacher.php'));
         }
     )
@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check_admin' => App\Http\Middleware\CheckAdmin::class,
             'check_teacher' => App\Http\Middleware\CheckTeacher::class,
             'check_active' => App\Http\Middleware\CheckActive::class,
+            'check_website' => App\Http\Middleware\CheckWebsite::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

@@ -15,6 +15,9 @@ class CheckWebsite
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (setting('website_status') == 1) {
+            return $next($request);
+        }
+        return response()->view('inactive');
     }
 }

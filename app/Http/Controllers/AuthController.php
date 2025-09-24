@@ -15,6 +15,9 @@ class AuthController extends Controller
             if (auth()->user()->type->value == 'admin') {
                 return redirect()->route('dashboard.home');
             }
+            if (auth()->user()->type->value == 'teacher') {
+                return redirect()->route('teacher.home');
+            }
         }
         return view('login');
     }
@@ -28,6 +31,7 @@ class AuthController extends Controller
                 return redirect()->route('teacher.home')->with('success', 'تم تسجيل الدخول بنجاح');
             }
         }
+        Auth::logout();
         return redirect()->back()->with('error', 'البيانات غير صحيحه');
     }
 

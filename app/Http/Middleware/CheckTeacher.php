@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckTeacher
@@ -16,8 +17,11 @@ class CheckTeacher
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->user()->type->value != 'teacher') {
-            auth()->logout();
-            return redirect()->route('login')->with('error', 'غير مصرح لك بالدخول ');
+            if (Auth::check()) {
+                if (auth()->user()->type->value == 'admin') {
+                    return redirect()->route('dashboard.home');
+                }
+            }
         }
         return $next($request);
     }
