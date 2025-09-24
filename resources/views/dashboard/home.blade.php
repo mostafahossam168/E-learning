@@ -204,6 +204,44 @@
                                         </div>
                                     </div>
                                 @endcan
+                                @can('read_coupones')
+                                    <div class="col-12 col-md-6">
+                                        <div class="box-statistic purple">
+                                            <div class="right-side">
+                                                <h6 class="name"> العروض</h6>
+                                                <h3 class="amount num-stat" data-goal="{{ App\Models\Coupone::count() }}">0
+                                                </h3>
+                                                <a href="{{ route('dashboard.coupones.index') }}" class="link-view">عرض جميع
+                                                    العروض </a>
+                                            </div>
+                                            <div class="left-side">
+                                                <p class="status-number up"></p>
+                                                <div class="icon-holder yellow">
+                                                    <i class="fa-solid fa-gift"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endcan
+                                @can('read_contacts')
+                                    <div class="col-12 col-md-6">
+                                        <div class="box-statistic purple">
+                                            <div class="right-side">
+                                                <h6 class="name"> تواصل معنا</h6>
+                                                <h3 class="amount num-stat" data-goal="{{ App\Models\Contact::count() }}">0
+                                                </h3>
+                                                <a href="{{ route('dashboard.contacts.index') }}" class="link-view">عرض جميع
+                                                    الرسائل </a>
+                                            </div>
+                                            <div class="left-side">
+                                                <p class="status-number up"></p>
+                                                <div class="icon-holder yellow">
+                                                    <i class="fa-solid fa-comments"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endcan
                                 @can('read_settings')
                                     <div class="col-12 col-md-6">
                                         <div class="box-statistic blue">
@@ -221,22 +259,6 @@
                                         </div>
                                     </div>
                                 @endcan
-                                <div class="col-12 col-md-6">
-                                    <div class="box-statistic purple">
-                                        <div class="right-side">
-                                            <h6 class="name"> تواصل معنا</h6>
-                                            <h3 class="amount num-stat" data-goal="5">0
-                                            </h3>
-                                            <a href="#" class="link-view">عرض جميع الرسائل </a>
-                                        </div>
-                                        <div class="left-side">
-                                            <p class="status-number up"></p>
-                                            <div class="icon-holder yellow">
-                                                <i class="fa-solid fa-comments"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>

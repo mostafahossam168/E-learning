@@ -30,7 +30,7 @@
             <x-alert-component></x-alert-component>
             <!-- Put The Messages Here End -->
 
-            <form action="{{ route('dashboard.login-request') }}" method="POST" class="form_content">
+            <form action="{{ route('login-request') }}" method="POST" class="form_content">
                 @csrf
                 <img src="{{ asset('dashboard/img/login/logo-form.svg') }}" alt="logo" class="logo-form" />
                 <h3 class="header_title">

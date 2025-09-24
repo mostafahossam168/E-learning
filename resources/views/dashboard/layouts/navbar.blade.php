@@ -77,7 +77,7 @@
                                 </a>
                             </li>
                             <li>
-                                <form id="logoutForm" action="{{ route('dashboard.logout') }}" method="post">
+                                <form id="logoutForm" action="{{ route('logout') }}" method="post">
                                     @csrf
                                 </form>
                                 <a class="dropdown-item" href="#"

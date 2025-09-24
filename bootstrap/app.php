@@ -14,11 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware('web')->prefix('dashboard')
                 ->name('dashboard.')->group(base_path('routes/dashboard.php'));
+            Route::middleware('web')->prefix('teacher/')
+                ->name('teacher.')->group(base_path('routes/teacher.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'check_admin' => App\Http\Middleware\CheckAdmin::class,
+            'check_teacher' => App\Http\Middleware\CheckTeacher::class,
             'check_active' => App\Http\Middleware\CheckActive::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

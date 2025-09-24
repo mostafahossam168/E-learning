@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\SettingsController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -21,4 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/index', [CourseController::class, 'index']);
         Route::get('/show/{id}', [CourseController::class, 'show']);
     });
+    //Settings
+    Route::get('/settings', [SettingsController::class, 'index']);
 });

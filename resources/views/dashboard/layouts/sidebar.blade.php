@@ -118,6 +118,26 @@
                 </a>
             </li>
         @endcan
+        @can('read_coupones')
+            <li class="list-item {{ request()->routeIs('dashboard.coupones.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.coupones.index') }}">
+                    <div>
+                        <i class="fa-solid fa-gift"></i>
+                        العروض
+                    </div>
+                </a>
+            </li>
+        @endcan
+        @can('read_contacts')
+            <li class="list-item {{ request()->routeIs('dashboard.contacts.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.contacts.index') }}">
+                    <div>
+                        <i class="fa-solid fa-comments"></i>
+                        تواصل معنا
+                    </div>
+                </a>
+            </li>
+        @endcan
         @can('read_actives')
             <li class="list-item {{ request()->routeIs('dashboard.actives.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.actives.index') }}">

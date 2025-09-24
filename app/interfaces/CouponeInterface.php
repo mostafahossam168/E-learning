@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface LessonInterface
+interface CouponeInterface
 {
     public function index();
     public function create();

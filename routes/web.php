@@ -2,14 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('login', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard.home');
-    }
-    return view('dashboard.login');
-})->name('login');
+Route::get('login', [AuthController::class, 'formLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login-request');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
