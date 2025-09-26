@@ -15,14 +15,18 @@
                         </a>
                     @endcan
                     <a href="{{ route('dashboard.admins.index') }}" class="main-btn btn-main-color">الكل :
-                        {{ App\Models\User::admins()->count() }}</a>
+                        {{ $count_all }}</a>
                     <a href="{{ route('dashboard.admins.index', ['status' => 'yes']) }}"
                         class="main-btn btn-sm bg-success">مفعلين :
-                        {{ App\Models\User::admins()->active()->count() }}</a>
+                        {{ $count_active }}</a>
                     <a href="{{ route('dashboard.admins.index', ['status' => 'no']) }}"
-                        class="main-btn btn-sm  bg-danger">غير
-                        مفعلين :
-                        {{ App\Models\User::admins()->inactive()->count() }}</a>
+                        class="main-btn btn-sm  bg-danger">غير مفعلين :{{ $count_inactive }}</a>
+                    <a href="{{ route('dashboard.admins.export', [
+                        'status' => request('status'),
+                        'search' => request('search'),
+                    ]) }}"
+                        class="main-btn btn-sm  bg-warning ">
+                        <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
                 </div>
             </div>
             <div class="box-search">
@@ -52,7 +56,7 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr>
-                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td> <img style="width: 60px; height:60px" src="{{ display_file($item->image) }}"
                                     alt="" srcset=""></td>
                             <td> {{ $item->name }}</td>

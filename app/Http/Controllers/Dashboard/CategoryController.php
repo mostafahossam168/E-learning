@@ -90,7 +90,7 @@ class CategoryController extends Controller
 
     public function export()
     {
-        $items = $this->itemRepository->index();
+        $items = $this->itemRepository->index()['items'];
         return Excel::download(new CategoriesExport($items), 'categories.xlsx');
     }
 }

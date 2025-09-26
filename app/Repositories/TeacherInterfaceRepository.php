@@ -12,7 +12,7 @@ class TeacherInterfaceRepository implements TeacherInterface
     {
         $status = request('status');
         $search = request('search');
-        return User::when($search, function ($q) use ($search) {
+        $items = User::when($search, function ($q) use ($search) {
             $q->where('name', 'LIKE', "%$search%")
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('phone', 'LIKE', "%$search%");
@@ -24,15 +24,21 @@ class TeacherInterfaceRepository implements TeacherInterface
                 $q->inactive();
             }
         })->teachers()->latest()->paginate(20);
+
+        $count_all = User::teachers()->count();
+        $count_active = User::teachers()->active()->count();
+        $count_inactive = User::teachers()->inactive()->count();
+        return [
+            'items' => $items,
+            'count_all' => $count_all,
+            'count_active' => $count_active,
+            'count_inactive' => $count_inactive,
+        ];
     }
     public function show($id)
     {
         $item = User::find($id);
         return $item;
-    }
-    public function create()
-    {
-        return  DB::table('roles')->select('name')->get();
     }
     public function store($validated)
     {
@@ -43,9 +49,8 @@ class TeacherInterfaceRepository implements TeacherInterface
 
     public function edit($id)
     {
-        $roles = DB::table('roles')->select('name')->get();
         $item = User::find($id);
-        return ['roles' => $roles, 'item' => $item];
+        return  $item;
     }
     public function update($validated, $id)
     {
@@ -57,5 +62,10 @@ class TeacherInterfaceRepository implements TeacherInterface
     {
         $item =  User::find($id);
         $item->delete();
+    }
+
+    public function getRoles()
+    {
+        return  DB::table('roles')->select('name')->get();
     }
 }

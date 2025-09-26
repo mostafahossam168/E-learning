@@ -12,7 +12,7 @@ class AdminInterfaceRepository implements AdminInterface
     {
         $status = request('status');
         $search = request('search');
-        return User::when($search, function ($q) use ($search) {
+        $items = User::when($search, function ($q) use ($search) {
             $q->where('name', 'LIKE', "%$search%")
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('phone', 'LIKE', "%$search%");
@@ -24,15 +24,20 @@ class AdminInterfaceRepository implements AdminInterface
                 $q->inactive();
             }
         })->admins()->latest()->paginate(20);
+        $count_all = User::admins()->count();
+        $count_active = User::admins()->active()->count();
+        $count_inactive = User::admins()->inactive()->count();
+        return [
+            'items' => $items,
+            'count_all' => $count_all,
+            'count_active' => $count_active,
+            'count_inactive' => $count_inactive,
+        ];
     }
     public function show($id)
     {
         $item = User::find($id);
         return $item;
-    }
-    public function create()
-    {
-        return  DB::table('roles')->select('name')->get();
     }
     public function store($validated)
     {
@@ -43,9 +48,8 @@ class AdminInterfaceRepository implements AdminInterface
 
     public function edit($id)
     {
-        $roles = DB::table('roles')->select('name')->get();
         $item = User::find($id);
-        return ['roles' => $roles, 'item' => $item];
+        return  $item;
     }
     public function update($validated, $id)
     {
@@ -57,5 +61,11 @@ class AdminInterfaceRepository implements AdminInterface
     {
         $item =  User::find($id);
         $item->delete();
+    }
+
+
+    public function getRoles()
+    {
+        return  DB::table('roles')->select('name')->get();
     }
 }

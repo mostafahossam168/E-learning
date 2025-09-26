@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Enums\TypeUser;
+use App\Exports\AdminsExport;
 use Illuminate\Http\Request;
 use App\Interfaces\AdminInterface;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AdminRequest;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends \Illuminate\Routing\Controller
 {
@@ -26,9 +28,12 @@ class AdminController extends \Illuminate\Routing\Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        // return $items;
-        return view('dashboard.admins.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        return view('dashboard.admins.index', compact('items', 'count_all', 'count_active', 'count_inactive'));
     }
 
     /**
@@ -36,7 +41,7 @@ class AdminController extends \Illuminate\Routing\Controller
      */
     public function create()
     {
-        $roles = $this->itemRepository->create();
+        $roles = $this->itemRepository->getRoles();
         return view('dashboard.admins.create', compact('roles'));
     }
 
@@ -69,9 +74,8 @@ class AdminController extends \Illuminate\Routing\Controller
      */
     public function edit(string $id)
     {
-        $item = $this->itemRepository->edit($id)['item'];
-        $roles = $this->itemRepository->edit($id)['roles'];
-
+        $item = $this->itemRepository->edit($id);
+        $roles = $this->itemRepository->getRoles();
         return view('dashboard.admins.edit', compact('item', 'roles'));
     }
 
@@ -105,5 +109,11 @@ class AdminController extends \Illuminate\Routing\Controller
         }
         $this->itemRepository->delete($id);
         return redirect()->back()->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+    public function export()
+    {
+        $items = $this->itemRepository->index()['items'];
+        return Excel::download(new AdminsExport($items), 'admins.xlsx');
     }
 }

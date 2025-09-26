@@ -24,8 +24,11 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
     Route::view('settings', 'dashboard.settings')->name('settings');
     Route::post('settings', [SettingController::class, 'update'])->name('update-settings');
     Route::resource('admins', AdminController::class);
+    Route::get('/export/admins', [AdminController::class, 'export'])->name('admins.export');
     Route::resource('students', StudentController::class);
+    Route::get('/export/students', [StudentController::class, 'export'])->name('students.export');
     Route::resource('teachers', TeacherController::class);
+    Route::get('/export/teachers', [TeacherController::class, 'export'])->name('teachers.export');
     Route::resource('roles', RoleController::class);
     Route::resource('categories', CategoryController::class);
     Route::get('/export/categories', [CategoryController::class, 'export'])->name('categories.export');

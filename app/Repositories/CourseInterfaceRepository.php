@@ -12,6 +12,7 @@ class CourseInterfaceRepository implements CourseInterface
     public function index()
     {
         $category_id = request('category_id');
+        $teacher_id = request('teacher_id');
         $status = request('status');
         $search = request('search');
         $items = Course::when($search, function ($q) use ($search) {
@@ -26,6 +27,8 @@ class CourseInterfaceRepository implements CourseInterface
             }
         })->when($category_id, function ($q) use ($category_id) {
             $q->where('category_id', $category_id);
+        })->when($teacher_id, function ($q) use ($teacher_id) {
+            $q->where('teacher_id', $teacher_id);
         })->latest()->paginate(30);
         return [
             'items' => $items,

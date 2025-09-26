@@ -30,7 +30,8 @@ class CourseController extends Controller
         $count_active = $data['count_active'];
         $count_inactive = $data['count_inactive'];
         $categories = $this->itemRepository->getCategories();
-        return view('dashboard.courses.index', compact('items', 'categories', 'count_all', 'count_active', 'count_inactive'));
+        $teachers = $this->itemRepository->getTeachers();
+        return view('dashboard.courses.index', compact('items', 'teachers', 'categories', 'count_all', 'count_active', 'count_inactive'));
     }
 
     /**

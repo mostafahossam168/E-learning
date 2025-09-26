@@ -31,7 +31,7 @@
                 <form action="{{ route('dashboard.courses.index') }}" method="GET">
                     <div class="row g-3">
                         <!-- فلتر القسم -->
-                        <div class="col-3">
+                        <div class="col-2">
                             <select name="category_id" class="form-select">
                                 <option value="">اختيار القسم</option>
                                 @foreach ($categories as $category)
@@ -43,8 +43,21 @@
                             </select>
                         </div>
 
+
+                        <div class="col-2">
+                            <select name="teacher_id" class="form-select">
+                                <option value="">اختيار المعلم</option>
+                                @foreach ($teachers as $teacher)
+                                    <option value="{{ $teacher->id }}"
+                                        {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                        {{ $teacher->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- فلتر الحالة -->
-                        <div class="col-3">
+                        <div class="col-2">
                             <select name="status" class="form-select">
                                 <option value="">اختيار الحالة</option>
                                 <option value="yes" {{ request('status') == 'yes' ? 'selected' : '' }}>مفعل</option>
@@ -52,7 +65,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div>
                                 <input class="form-control" type="search" id="" value="{{ request('search') }}"
                                     name="search" placeholder="@lang('Search')" />

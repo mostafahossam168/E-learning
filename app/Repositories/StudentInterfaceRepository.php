@@ -11,7 +11,7 @@ class StudentInterfaceRepository implements StudentInterface
     {
         $status = request('status');
         $search = request('search');
-        return User::when($search, function ($q) use ($search) {
+        $items = User::when($search, function ($q) use ($search) {
             $q->where('name', 'LIKE', "%$search%")
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('phone', 'LIKE', "%$search%");
@@ -23,6 +23,16 @@ class StudentInterfaceRepository implements StudentInterface
                 $q->inactive();
             }
         })->students()->latest()->paginate(20);
+
+        $count_all = User::students()->count();
+        $count_active = User::students()->active()->count();
+        $count_inactive = User::students()->inactive()->count();
+        return [
+            'items' => $items,
+            'count_all' => $count_all,
+            'count_active' => $count_active,
+            'count_inactive' => $count_inactive,
+        ];
     }
     public function show($id)
     {

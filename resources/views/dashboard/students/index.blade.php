@@ -15,13 +15,19 @@
                         </a>
                     @endcan
                     <a href="{{ route('dashboard.students.index') }}" class="main-btn btn-main-color">الكل :
-                        {{ App\Models\User::students()->count() }}</a>
+                        {{ $count_all }}</a>
                     <a href="{{ route('dashboard.students.index', ['status' => 'yes']) }}"
                         class="main-btn btn-sm bg-success">مفعلين :
-                        {{ App\Models\User::students()->active()->count() }}</a>
+                        {{ $count_active }}</a>
                     <a href="{{ route('dashboard.students.index', ['status' => 'no']) }}"
-                        class="main-btn btn-sm  bg-danger">غير مفعلين :
-                        {{ App\Models\User::students()->inactive()->count() }}</a>
+                        class="main-btn btn-sm  bg-danger">غير مفعلين :{{ $count_inactive }}</a>
+                    <a href="{{ route('dashboard.students.export', [
+                        'status' => request('status'),
+                        'search' => request('search'),
+                    ]) }}"
+                        class="main-btn btn-sm  bg-warning ">
+                        <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
+
                 </div>
             </div>
             <div class="box-search">

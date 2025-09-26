@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Enums\TypeUser;
+use App\Exports\TeachersExport;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Interfaces\TeacherInterface;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\TeacherRequest;
 use App\Repositories\TeacherInterfaceRepository;
 
@@ -26,16 +28,21 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.teachers.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        return view('dashboard.teachers.index', compact('items', 'count_all', 'count_active', 'count_inactive'));
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $roles = $this->itemRepository->create();
+        $roles = $this->itemRepository->getRoles();
         return view('dashboard.teachers.create', compact('roles'));
     }
 
@@ -68,9 +75,8 @@ class TeacherController extends Controller
      */
     public function edit(string $id)
     {
-        $item = $this->itemRepository->edit($id)['item'];
-        $roles = $this->itemRepository->edit($id)['roles'];
-
+        $item = $this->itemRepository->edit($id);
+        $roles = $this->itemRepository->getRoles();
         return view('dashboard.teachers.edit', compact('item', 'roles'));
     }
 
@@ -107,5 +113,12 @@ class TeacherController extends Controller
         }
         $this->itemRepository->delete($id);
         return redirect()->back()->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+
+    public function export()
+    {
+        $items = $this->itemRepository->index()['items'];
+        return Excel::download(new TeachersExport($items), 'teachers.xlsx');
     }
 }

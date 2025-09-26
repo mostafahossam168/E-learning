@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Enums\TypeUser;
-use App\Http\Requests\StudentRequest;
+use App\Exports\StudentssExport;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Interfaces\StudentInterface;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\StudentRequest;
 use App\Repositories\StudentInterfaceRepository;
 
 class StudentController extends Controller
@@ -27,8 +29,12 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.students.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        return view('dashboard.students.index', compact('items', 'count_all', 'count_active', 'count_inactive'));
     }
 
     /**
@@ -103,5 +109,12 @@ class StudentController extends Controller
         }
         $this->itemRepository->delete($id);
         return redirect()->back()->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+
+    public function export()
+    {
+        $items = $this->itemRepository->index()['items'];
+        return Excel::download(new StudentssExport($items), 'students.xlsx');
     }
 }

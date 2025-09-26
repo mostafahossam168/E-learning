@@ -27,7 +27,11 @@
                     class="btn btn-success">مفعل:{{ $count_active }}</a>
                 <a href="{{ route('dashboard.categories.index', ['status' => 'no']) }}" type="button"
                     class="btn btn-danger">غير مفعل:{{ $count_inactive }}</a>
-                <a href="{{ route('dashboard.categories.export') }}" class="main-btn btn-sm  bg-warning ">
+                <a href="{{ route('dashboard.categories.export', [
+                    'status' => request('status'),
+                    'search' => request('search'),
+                ]) }}"
+                    class="main-btn btn-sm  bg-warning ">
                     <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
             </div>
 
