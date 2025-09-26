@@ -10,4 +10,6 @@ interface CourseInterface
     public function edit($id);
     public function update($validated, $id);
     public function delete($id);
+    public function getCategories();
+    public function getTeachers();
 }

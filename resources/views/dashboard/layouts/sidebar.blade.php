@@ -128,6 +128,16 @@
                 </a>
             </li>
         @endcan
+        @can('read_enrollments')
+            <li class="list-item {{ request()->routeIs('dashboard.enrollments.*') ? 'active' : '' }} ">
+                <a href="{{ route('dashboard.enrollments.index') }}">
+                    <div>
+                        <i class="fa-solid fa-gift"></i>
+                        الاشتراكات
+                    </div>
+                </a>
+            </li>
+        @endcan
         @can('read_contacts')
             <li class="list-item {{ request()->routeIs('dashboard.contacts.*') ? 'active' : '' }} ">
                 <a href="{{ route('dashboard.contacts.index') }}">

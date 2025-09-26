@@ -14,6 +14,7 @@ use App\Interfaces\CategoryInterface;
 use App\Interfaces\ContactInterface;
 use App\Interfaces\CouponeInterface;
 use App\Interfaces\CourseInterface;
+use App\Interfaces\EnrollmentInterface;
 use App\Interfaces\LessonInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\StudentInterface;
@@ -30,6 +31,7 @@ use App\Repositories\CategoryInterfaceRepository;
 use App\Repositories\ContactInterfaceRepository;
 use App\Repositories\CouponeInterfaceRepository;
 use App\Repositories\CourseInterfaceRepository;
+use App\Repositories\EnrollmentInterfaceRepository;
 use App\Repositories\LessonInterfaceRepository;
 use App\Repositories\RoleInterfaceRepository;
 use App\Repositories\StudentInterfaceRepository;
@@ -58,6 +60,7 @@ class RepositoryProvider extends ServiceProvider
         $this->app->bind(ActiveInterface::class, ActiveInterfaceRepository::class);
         $this->app->bind(CouponeInterface::class, CouponeInterfaceRepository::class);
         $this->app->bind(ContactInterface::class, ContactInterfaceRepository::class);
+        $this->app->bind(EnrollmentInterface::class, EnrollmentInterfaceRepository::class);
         //API
         $this->app->bind(ApiAuthInterface::class, ApiAuthInterfaceRepository::class);
         $this->app->bind(ApiCourseInterface::class, ApiCourseInterfaceRepository::class);

@@ -10,14 +10,15 @@ class CouponeInterfaceRepository  implements CouponeInterface
 {
     public function index()
     {
-        return Coupone::where(function ($q) {
-            if (request('search')) {
-                $q->where('code', 'LIKE', '%' . request('search') . '%');
-            }
-            if (request('status') && request('status') == 'yes') {
+        $status = request('status');
+        $search = request('search');
+        return Coupone::when($search, function ($q) use ($search) {
+            $q->where('code', 'LIKE', "%$search%");
+        })->when($status, function ($q) use ($status) {
+            if ($status == 'yes') {
                 $q->active();
             }
-            if (request('status') == 'no') {
+            if ($status == 'no') {
                 $q->inactive();
             }
         })->latest()->paginate();

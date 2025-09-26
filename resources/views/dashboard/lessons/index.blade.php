@@ -3,8 +3,11 @@
 @section('contant')
     <div class="main-side">
         <div class="main-title">
-            <div class="small">الرئيسية</div>
+            <div class="small">الرئيسية</div>/
             <div class="large">الدروس</div>
+            @if (request('course_id'))
+                <div class="small">الكورس : {{ App\Models\Course::find(request('course_id'))?->title }}</div>
+            @endif
         </div>
 
         <div class="bar-obtions d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">

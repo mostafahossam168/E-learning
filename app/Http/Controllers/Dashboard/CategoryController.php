@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\CategoryRequest;
-use App\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
+use App\Exports\CategoriesExport;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Interfaces\CategoryInterface;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -23,8 +25,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.categories.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        $categories = $data['categories'];
+        return view('dashboard.categories.index', compact('items', 'count_all', 'count_active', 'count_inactive', 'categories'));
     }
 
     /**
@@ -78,5 +85,12 @@ class CategoryController extends Controller
     {
         $this->itemRepository->delete($id);
         return redirect()->route('dashboard.categories.index')->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+
+    public function export()
+    {
+        $items = $this->itemRepository->index();
+        return Excel::download(new CategoriesExport($items), 'categories.xlsx');
     }
 }

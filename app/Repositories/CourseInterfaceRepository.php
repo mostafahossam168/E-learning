@@ -11,26 +11,27 @@ class CourseInterfaceRepository implements CourseInterface
 {
     public function index()
     {
-        return Course::where(function ($q) {
-            if (request('search')) {
-                $q->where('title', 'LIKE', '%' . request('search') . '%')
-                    ->orWhere('price', 'LIKE', '%' . request('search') . '%');
-            }
-            if (request('status') && request('status') == 'yes') {
+        $category_id = request('category_id');
+        $status = request('status');
+        $search = request('search');
+        $items = Course::when($search, function ($q) use ($search) {
+            $q->where('title', 'LIKE', "%$search%")
+                ->orWhere('price', 'LIKE', "%$search%");
+        })->when($status, function ($q) use ($status) {
+            if ($status == 'yes') {
                 $q->active();
             }
-            if (request('status') == 'no') {
+            if ($status == 'no') {
                 $q->inactive();
             }
+        })->when($category_id, function ($q) use ($category_id) {
+            $q->where('category_id', $category_id);
         })->latest()->paginate(30);
-    }
-    public function create()
-    {
-        $teachers = User::teachers()->active()->select('id', 'name')->get();
-        $categories = Category::active()->select('id', 'name')->get();
         return [
-            'teachers' => $teachers,
-            'categories' => $categories,
+            'items' => $items,
+            'count_all' => Course::count(),
+            'count_active' => Course::active()->count(),
+            'count_inactive' => Course::inactive()->count(),
         ];
     }
     public function show($id)
@@ -44,14 +45,8 @@ class CourseInterfaceRepository implements CourseInterface
     }
     public function edit($id)
     {
-        $teachers = User::teachers()->active()->select('id', 'name')->get();
-        $categories = Category::active()->select('id', 'name')->get();
         $item = Course::find($id);
-        return [
-            'teachers' => $teachers,
-            'categories' => $categories,
-            'item' => $item,
-        ];
+        return $item;
     }
     public function update($validated, $id)
     {
@@ -62,5 +57,16 @@ class CourseInterfaceRepository implements CourseInterface
     {
         $item = Course::find($id);
         $item->delete();
+    }
+
+
+
+    public function getCategories()
+    {
+        return Category::select('id', 'name')->get();
+    }
+    public function getTeachers()
+    {
+        return User::teachers()->active()->select('id', 'name')->get();
     }
 }

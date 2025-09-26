@@ -12,6 +12,7 @@ return [
         'lessons' => $map,
         'coupones' => $map,
         'settings' => ['read', 'update'],
+        'enrollments' => ['read', 'update'],
         'actives' => ['read', 'delete'],
         'contacts' => ['read', 'delete'],
         'statistics_home' => ['read'],

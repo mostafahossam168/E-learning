@@ -10,10 +10,9 @@ class RoleInterfaceRepository implements RoleInterface
 {
     public function index()
     {
-        return Role::where(function ($q) {
-            if (request('search')) {
-                $q->where('name', 'LIKE', '%' . request('search') . '%');
-            }
+        $search = request('search');
+        return Role::when($search, function ($q) use ($search) {
+            $q->where('name', 'LIKE', "%$search%");
         })->orderBy('id', 'DESC')->paginate(5);
     }
     public function show($id)

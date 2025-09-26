@@ -21,7 +21,7 @@
                             <label for="">متفرع من</label>
                             <select name="parent_id" id="" class="form-control">
                                 <option value="">-- اختر --</option>
-                                @foreach (App\Models\Category::select('id', 'name')->get() as $category)
+                                @foreach ($categories as $category)
                                     <option @selected($category->id == $item->parent_id) value="{{ $category->id }}">
                                         {{ $category->name }}
                                     </option>

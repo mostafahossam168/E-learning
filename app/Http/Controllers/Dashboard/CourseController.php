@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\CourseRequest;
-use App\Interfaces\CourseInterface;
-use Illuminate\Http\Request;
+use App\Exports\CoursesExport;
 use Illuminate\Routing\Controller;
+use App\Interfaces\CourseInterface;
+use App\Http\Requests\CourseRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CourseController extends Controller
 {
@@ -23,8 +24,13 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.courses.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        $categories = $this->itemRepository->getCategories();
+        return view('dashboard.courses.index', compact('items', 'categories', 'count_all', 'count_active', 'count_inactive'));
     }
 
     /**
@@ -32,8 +38,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $categories = $this->itemRepository->create()['categories'];
-        $teachers = $this->itemRepository->create()['teachers'];
+        $categories = $this->itemRepository->getCategories();
+        $teachers = $this->itemRepository->getTeachers();
         return view('dashboard.courses.create', compact('teachers', 'categories'));
     }
 
@@ -61,9 +67,9 @@ class CourseController extends Controller
      */
     public function edit(string $id)
     {
-        $categories = $this->itemRepository->edit($id)['categories'];
-        $teachers = $this->itemRepository->edit($id)['teachers'];
-        $item = $this->itemRepository->edit($id)['item'];
+        $categories = $this->itemRepository->getCategories();
+        $teachers = $this->itemRepository->getTeachers();
+        $item = $this->itemRepository->edit($id);
         return view('dashboard.courses.edit', compact('item', 'teachers', 'categories'));
     }
 
@@ -91,5 +97,12 @@ class CourseController extends Controller
         delete_file($item->cover); // DELETE COVER
         $this->itemRepository->delete($id);
         return redirect()->back()->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+
+    public function export()
+    {
+        $items = $this->itemRepository->index()['items'];
+        return Excel::download(new CoursesExport($items), 'courses.xlsx');
     }
 }

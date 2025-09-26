@@ -10,16 +10,17 @@ class TeacherInterfaceRepository implements TeacherInterface
 {
     public function index()
     {
-        return User::where(function ($q) {
-            if (request('search')) {
-                $q->where('name', 'LIKE', '%' . request('search') . '%')
-                    ->orWhere('email', 'LIKE', '%' . request('search') . '%')
-                    ->orWhere('phone', 'LIKE', '%' . request('search') . '%');
-            }
-            if (request('status') && request('status') == 'yes') {
+        $status = request('status');
+        $search = request('search');
+        return User::when($search, function ($q) use ($search) {
+            $q->where('name', 'LIKE', "%$search%")
+                ->orWhere('email', 'LIKE', "%$search%")
+                ->orWhere('phone', 'LIKE', "%$search%");
+        })->when($status, function ($q) use ($status) {
+            if ($status == 'yes') {
                 $q->active();
             }
-            if (request('status') == 'no') {
+            if ($status == 'no') {
                 $q->inactive();
             }
         })->teachers()->latest()->paginate(20);

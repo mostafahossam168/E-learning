@@ -58,7 +58,8 @@
                             <td> {{ $item->email }}</td>
                             <td> {{ $item->phone }}</td>
                             <td> <span class="badge {{ $item->status->color() }}">{{ $item->status->name() }}</span> </td>
-                            <td><a href="#" class="btn btn-sm btn-info">0</a></td>
+                            <td><a href="{{ route('dashboard.enrollments.index', ['student_id' => $item->id]) }}"
+                                    class="btn btn-sm btn-warning"> {{ $item->studentCourses()->count() }}</a></td>
                             <td>
                                 <div class="btn-holder d-flex align-items-center gap-3">
                                     @can('update_students')

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('status')->default(StatusEnrollment::ACTIVE->value);
+            $table->decimal('price', 8, 2);
+            $table->boolean('status')->default(1);
             $table->unique(['student_id', 'course_id']);
             $table->timestamps();
         });

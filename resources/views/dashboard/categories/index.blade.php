@@ -22,14 +22,13 @@
                     @include('dashboard.categories.create-modal')
                 @endcan
                 <a href="{{ route('dashboard.categories.index') }}" type="button" class="main-btn btn-main-color">الكل:
-                    {{ App\Models\Category::count() }}</a>
+                    {{ $count_all }}</a>
                 <a href="{{ route('dashboard.categories.index', ['status' => 'yes']) }}" type="button"
-                    class="btn btn-success">مفعل:
-                    {{ App\Models\Category::active()->count() }}</a>
+                    class="btn btn-success">مفعل:{{ $count_active }}</a>
                 <a href="{{ route('dashboard.categories.index', ['status' => 'no']) }}" type="button"
-                    class="btn btn-danger">غير
-                    مفعل:
-                    {{ App\Models\Category::inactive()->count() }}</a>
+                    class="btn btn-danger">غير مفعل:{{ $count_inactive }}</a>
+                <a href="{{ route('dashboard.categories.export') }}" class="main-btn btn-sm  bg-warning ">
+                    <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
             </div>
 
             <div class="box-search">
@@ -49,6 +48,7 @@
                         <th>الاسم</th>
                         <th>متفرع من </th>
                         <th>الحالة</th>
+                        <th>الكورسات</th>
                         <th>العمليات</th>
                     </tr>
                 </thead>
@@ -60,6 +60,10 @@
                             <td>{{ $item->parent?->name ?? '---' }}</td>
                             <td>
                                 <span class="badge {{ $item->status->color() }}">{{ $item->status->name() }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ route('dashboard.courses.index', ['category_id' => $item->id]) }}"
+                                    class="btn btn-sm btn-warning">{{ $item->courses->count() }}</a>
                             </td>
                             <td class="d-flex gap-2">
                                 @can('update_categories')

@@ -3,16 +3,20 @@
 namespace App\Repositories\Api;
 
 use App\Interfaces\Api\ApiEnrollmentInterface;
+use App\Models\Course;
 
 class ApiEnrollmentInterfaceRepository implements ApiEnrollmentInterface
 {
     public function store($data)
     {
         $user = auth()->user();
+        $course = Course::find($data['course_id']);
         if ($user->studentCourses()->where('course_id', $data['course_id'])->exists()) {
             return 0;
         }
-        $user->studentCourses()->attach(1);
+        $user->studentCourses()->attach($data['course_id'], [
+            'price' => $course->price,
+        ]);
         return 1;
     }
     public function index($request)

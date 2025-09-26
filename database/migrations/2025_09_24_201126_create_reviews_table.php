@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete()->cascadeOnUpdate();
             $table->longText('comment');
             $table->tinyInteger('rate');
-            $table->boolean('status')->default(StatusReview::ACTIVE->value);
+            $table->boolean('status')->default(1);
             $table->unique(['student_id', 'course_id']);
             $table->timestamps();
         });
