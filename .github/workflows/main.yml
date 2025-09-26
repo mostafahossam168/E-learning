@@ -39,9 +39,6 @@ jobs:
               php artisan key:generate
             fi
 
-
-
-
             echo "🧼 Clearing cache && Run Database"
             php artisan migrate
             php artisan config:clear
