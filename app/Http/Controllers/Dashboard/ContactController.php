@@ -8,8 +8,6 @@ use App\Interfaces\ContactInterface;
 
 class ContactController extends Controller
 {
-
-
     public $itemRepository;
     public function __construct(ContactInterface $item)
     {

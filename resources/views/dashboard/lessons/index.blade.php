@@ -5,9 +5,6 @@
         <div class="main-title">
             <div class="small">الرئيسية</div>/
             <div class="large">الدروس</div>
-            @if (request('course_id'))
-                <div class="small">الكورس : {{ App\Models\Course::find(request('course_id'))?->title }}</div>
-            @endif
         </div>
 
         <div class="bar-obtions d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
@@ -18,23 +15,62 @@
                         </a>
                     @endcan
                     <a href="{{ route('dashboard.lessons.index') }}" class="main-btn btn-main-color">الكل :
-                        {{ App\Models\Lesson::count() }}</a>
+                        {{ $count_all }}</a>
                     <a href="{{ route('dashboard.lessons.index', ['status' => 'yes']) }}"
-                        class="main-btn btn-sm bg-success">مفعلين :
-                        {{ App\Models\Lesson::active()->count() }}</a>
+                        class="main-btn btn-sm bg-success">مفعلين : {{ $count_active }}</a>
                     <a href="{{ route('dashboard.lessons.index', ['status' => 'no']) }}"
-                        class="main-btn btn-sm  bg-danger">غير
-                        مفعلين :
-                        {{ App\Models\Lesson::inactive()->count() }}</a>
+                        class="main-btn btn-sm  bg-danger">غير مفعلين : {{ $count_inactive }}</a>
+                    <a href="{{ route('dashboard.lessons.export', [
+                        'course_id' => request('course_id'),
+                        'search' => request('search'),
+                        'status' => request('status'),
+                    ]) }}"
+                        class="main-btn btn-sm  bg-warning ">
+                        <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
                 </div>
-            </div>
-            <div class="box-search">
-                <form action="">
-                    <img src="{{ asset('dashboard/img/icons/search.png') }}" alt="icon" />
-                    <input type="search" id="" value="{{ request('search') }}" name="search"
-                        placeholder="@lang('Search')" />
+
+
+                <form action="{{ route('dashboard.lessons.index') }}" method="GET">
+                    <div class="row g-3">
+                        <!-- فلتر القسم -->
+                        <div class="col-3">
+                            <select name="course_id" class="form-select">
+                                <option value="">اختيار الكورس</option>
+                                @foreach ($courses as $course)
+                                    <option value="{{ $course->id }}"
+                                        {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                                        {{ $course->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+
+
+                        <!-- فلتر الحالة -->
+                        <div class="col-3">
+                            <select name="status" class="form-select">
+                                <option value="">اختيار الحالة</option>
+                                <option value="yes" {{ request('status') == 'yes' ? 'selected' : '' }}>مفعل</option>
+                                <option value="no" {{ request('status') == 'no' ? 'selected' : '' }}>غير مفعل
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <div>
+                                <input class="form-control" type="search" id="" value="{{ request('search') }}"
+                                    name="search" placeholder="@lang('Search')" />
+                            </div>
+                        </div>
+                        <!-- زر البحث -->
+                        <div class="col">
+                            <button type="submit" class="btn btn-sm btn-primary">تصفية</button>
+                        </div>
+                    </div>
                 </form>
             </div>
+
 
         </div>
         <x-alert-component></x-alert-component>
@@ -54,7 +90,7 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr>
-                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td> {{ $item->title }}</td>
                             <td> {{ $item->course->title }}</td>
                             <td>

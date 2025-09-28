@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EnrollmentRequest extends FormRequest
+class ApplyCouponeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class EnrollmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'code' => 'required|numeric|digits:6',
             'course_id' => 'required|exists:courses,id',
-            'code' => 'nullable|numeric|digits:6',
         ];
     }
 }

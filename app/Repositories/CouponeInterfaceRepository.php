@@ -12,7 +12,11 @@ class CouponeInterfaceRepository  implements CouponeInterface
     {
         $status = request('status');
         $search = request('search');
-        return Coupone::when($search, function ($q) use ($search) {
+        $discount_type = request('discount_type');
+        $course_id = request('course_id');
+        $start_date = request('start_date');
+        $end_date = request('end_date');
+        $items = Coupone::when($search, function ($q) use ($search) {
             $q->where('code', 'LIKE', "%$search%");
         })->when($status, function ($q) use ($status) {
             if ($status == 'yes') {
@@ -21,28 +25,39 @@ class CouponeInterfaceRepository  implements CouponeInterface
             if ($status == 'no') {
                 $q->inactive();
             }
-        })->latest()->paginate();
-    }
-    public function create()
-    {
-        $courses = Course::active()->select('id', 'title')->get();
+        })->when($discount_type, function ($q) use ($discount_type) {
+            $q->where('discount_type', $discount_type);
+        })->when($course_id, function ($q) use ($course_id) {
+            if ($course_id == 'all') {
+                $q->whereNull('course_id');
+            }
+            $q->where('course_id', $course_id)->orWhereNull('course_id');
+        })->when($start_date, function ($q) use ($start_date) {
+            $q->where('start_date', '>=', $start_date);
+        })
+            ->when($end_date, function ($q) use ($end_date) {
+                $q->where('end_date', '<=', $end_date);
+            })
+            ->latest()->paginate(30);
+
+        $count_all = Coupone::count();
+        $count_active = Coupone::active()->count();
+        $count_inactive = Coupone::inactive()->count();
         return [
-            'courses' => $courses,
+            'items' => $items,
+            'count_all' => $count_all,
+            'count_active' => $count_active,
+            'count_inactive' => $count_inactive,
         ];
     }
     public function store($validated)
     {
         return Coupone::create($validated);
     }
-    public function show($id) {}
     public function edit($id)
     {
         $item = Coupone::findOrFail($id);
-        $courses = Course::active()->select('id', 'title')->get();
-        return [
-            'item' => $item,
-            'courses' => $courses,
-        ];
+        return $item;
     }
     public function update($validated, $id)
     {
@@ -53,5 +68,11 @@ class CouponeInterfaceRepository  implements CouponeInterface
     {
         $item = Coupone::findOrFail($id);
         $item->delete();
+    }
+
+    public function getCourses()
+    {
+        $courses = Course::select('id', 'title')->get();
+        return $courses;
     }
 }

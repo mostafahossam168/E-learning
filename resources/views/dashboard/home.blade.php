@@ -137,10 +137,9 @@
                         <div class="col-12 col-md-6">
                             <div class="card">
                                 <div class="card-header bg-white">
-                                    الاحصائيات
-                                </div>
+                                    📊 إحصائيات التسجيل في الكورسات </div>
                                 <div class="card-body">
-                                    <canvas class="w-100" id="myChartDate" height="250"></canvas>
+                                    <canvas id="enrollmentsChart" height="200"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -270,49 +269,6 @@
 @endsection
 @push('scripts')
     <script>
-        let xValues = ["January", "February", "March", "April", "May", "June", "July"];
-        new Chart("myChartDate", {
-            type: "bar", // الرسم البياني من نوع الأعمدة
-            data: {
-                labels: xValues,
-                datasets: [{
-                        type: 'line',
-                        label: 'الطلاب',
-                        data: [0, 50, 500, 200, 400, 300, 100],
-                        borderWidth: 2,
-                        pointRadius: 1,
-                        borderColor: "#405189",
-                        backgroundColor: "rgb(64 81 137 / 10%)",
-                        fill: true
-                    },
-                    {
-                        label: 'الكورسات',
-                        data: [100, 200, 700, 800, 500, 600, 300],
-                        type: 'line',
-                        borderWidth: 2,
-                        pointRadius: 1,
-                        borderColor: "#f06548",
-                        fill: true
-                    }
-                ],
-                options: {
-                    responsive: true,
-                    legend: {
-                        display: true
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    hover: {
-                        mode: 'index',
-                        intersect: false
-                    }
-                }
-            },
-        });
-
-
         if (document.querySelectorAll(".num-stat")) {
             let numStats = document.querySelectorAll(".num-stat");
             let started = false;
@@ -337,5 +293,45 @@
                 requestAnimationFrame(updateCount);
             }
         }
+    </script>
+
+    @php
+        $courses = App\Models\Course::withCount('students')->get();
+
+        $labels = $courses->pluck('title'); // أسماء الكورسات
+        $data = $courses->pluck('students_count'); // عدد المسجلين
+    @endphp
+    <script>
+        const ctx = document.getElementById('enrollmentsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($labels),
+                datasets: [{
+                    label: 'عدد المسجلين',
+                    data: @json($data),
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
 @endpush

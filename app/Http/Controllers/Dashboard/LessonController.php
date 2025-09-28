@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use FFMpeg\FFProbe;
 use Illuminate\Http\Request;
+use App\Exports\LessonsExport;
 use Illuminate\Routing\Controller;
-use App\Http\Requests\LessonRequest;
 use App\Interfaces\LessonInterface;
+use App\Http\Requests\LessonRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LessonController extends Controller
 {
@@ -24,8 +26,13 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.lessons.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        $courses = $this->itemRepository->getCourses();
+        return view('dashboard.lessons.index', compact('items', 'count_all', 'count_active', 'count_inactive', 'courses'));
     }
 
     /**
@@ -33,7 +40,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        $courses = $this->itemRepository->create()['courses'];
+        $courses = $this->itemRepository->getCourses();
         return view('dashboard.lessons.create', compact('courses'));
     }
 
@@ -64,8 +71,8 @@ class LessonController extends Controller
      */
     public function edit(string $id)
     {
-        $courses = $this->itemRepository->edit($id)['courses'];
-        $item = $this->itemRepository->edit($id)['item'];
+        $item = $this->itemRepository->edit($id);
+        $courses = $this->itemRepository->getCourses();
         return view('dashboard.lessons.edit', compact('courses', 'item'));
     }
 
@@ -98,5 +105,12 @@ class LessonController extends Controller
         delete_file($item->video_url); // DELETE COVER
         $this->itemRepository->delete($id);
         return redirect()->back()->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+
+    public function export()
+    {
+        $items = $this->itemRepository->index()['items'];
+        return Excel::download(new LessonsExport($items), 'lessons.xlsx');
     }
 }

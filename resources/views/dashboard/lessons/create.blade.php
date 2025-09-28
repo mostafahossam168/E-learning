@@ -2,8 +2,6 @@
 
 @section('contant')
     <div class="main-side">
-
-
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="main-title">
                 <div class="small">الرئيسية</div>/
@@ -51,7 +49,7 @@
                     <select name="status" id="" class="form-select select-setting">
                         <option value="">-- اختر --</option>
                         @foreach (collect(\App\enums\StatusLesson::cases())->toArray() as $status)
-                            <option value="{{ $status }}" @selected(old('status') == $status->value)>
+                            <option value="{{ $status }}" @selected(old('status') === $status->value)>
                                 {{ $status->name() }}
                             </option>
                         @endforeach

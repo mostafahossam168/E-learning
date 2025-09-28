@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete()->cascadeOnUpdate();
             $table->decimal('price', 8, 2);
+            $table->decimal('final_price', 8, 2);  // السعر بعد الخصم
+            $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
             $table->boolean('status')->default(1);
             $table->unique(['student_id', 'course_id']);
             $table->timestamps();

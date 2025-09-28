@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(EnrollmentController::class)->prefix('enrollments')->group(function () {
         Route::get('/', 'index');
         Route::post('/store', 'store');
+        // Route::post('/apply-coupone', 'applyCoupone');
     });
     // Favorites
     Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {

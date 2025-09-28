@@ -7,22 +7,27 @@ use App\Models\Course;
 
 class ApiEnrollmentInterfaceRepository implements ApiEnrollmentInterface
 {
-    public function store($data)
+    public function store($course_id, $data)
     {
         $user = auth()->user();
-        $course = Course::find($data['course_id']);
-        if ($user->studentCourses()->where('course_id', $data['course_id'])->exists()) {
+        if ($user->studentCourses()->where('course_id', $course_id)->exists()) {
             return 0;
         }
-        $user->studentCourses()->attach($data['course_id'], [
-            'price' => $course->price,
-        ]);
+        $user->studentCourses()->attach($course_id, $data);
         return 1;
     }
+
+
     public function index($request)
     {
         $user = auth()->user();
         return $user->studentCourses()->wherePivot('status', 1)
             ->offset($request->input('offset', 0))->take($request->input('take', 30))->get();
+    }
+
+
+    public function getCourse($id)
+    {
+        return  Course::find($id);
     }
 }

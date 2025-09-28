@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\CouponeController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\EnrollmentController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\ReviewController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\StudentController;
@@ -35,6 +36,7 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
     Route::resource('courses', CourseController::class);
     Route::get('/export/courses', [CourseController::class, 'export'])->name('courses.export');
     Route::resource('lessons', LessonController::class);
+    Route::get('/export/lessons', [LessonController::class, 'export'])->name('lessons.export');
     Route::resource('coupones', CouponeController::class);
     Route::get('/actives', [ActiveController::class, 'index'])->name('actives.index');
     Route::delete('/delete/{id}', [ActiveController::class, 'destroy'])->name('actives.destroy');
@@ -43,6 +45,11 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
         Route::delete('/delete/{id}', 'destroy')->name('destroy');
     });
     Route::controller(EnrollmentController::class)->prefix('enrollments')->as('enrollments.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/export', 'export')->name('export');
+    });
+    Route::controller(ReviewController::class)->prefix('reviews')->as('reviews.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/export', 'export')->name('export');

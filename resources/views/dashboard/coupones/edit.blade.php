@@ -67,7 +67,7 @@
                         <span>القيمه</span>
                         <div class="box-input">
                             <input type="number" step="any" min="0" name="discount_value"
-                                value="{{ $item->discnt_value ?? 0 }}" id="">
+                                value="{{ $item->discount_value ?? 0 }}" id="">
                         </div>
                         @error('discount_value')
                             <span class="text-danger">{{ $message }}</span>

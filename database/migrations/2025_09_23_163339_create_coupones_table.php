@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('code', 6)->unique();
             $table->string('discount_type');
             $table->decimal('discount_value', 8, 2);
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('course_id')->nullable()->constrained('courses')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('usage_limit')->default(1);
             $table->integer('used_count')->default(0);
             $table->dateTime('start_date');

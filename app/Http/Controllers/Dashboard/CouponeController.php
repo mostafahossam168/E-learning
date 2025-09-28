@@ -23,16 +23,20 @@ class CouponeController extends Controller
      */
     public function index()
     {
-        $items = $this->itemRepository->index();
-        return view('dashboard.coupones.index', compact('items'));
+        $data = $this->itemRepository->index();
+        $items = $data['items'];
+        $count_all = $data['count_all'];
+        $count_active = $data['count_active'];
+        $count_inactive = $data['count_inactive'];
+        $courses = $this->itemRepository->getCourses();
+        return view('dashboard.coupones.index', compact('items', 'count_all', 'count_active', 'count_inactive', 'courses'));
     }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $items = $this->itemRepository->create();
-        $courses = $items['courses'];
+        $courses = $this->itemRepository->getCourses();
         return view('dashboard.coupones.create', compact('courses'));
     }
 
@@ -47,21 +51,12 @@ class CouponeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $items = $this->itemRepository->edit($id);
-        $courses = $items['courses'];
-        $item = $items['item'];
+        $item = $this->itemRepository->edit($id);
+        $courses = $this->itemRepository->getCourses();
         return view('dashboard.coupones.edit', compact('courses', 'item'));
     }
 

@@ -1,32 +1,30 @@
-@extends('dashboard.layouts.backend', ['title' => 'الاشتراكات'])
+@extends('dashboard.layouts.backend', ['title' => 'التقيمات'])
 
 @section('contant')
     <div class="main-side">
         <div class="main-title">
             <div class="small">الرئيسية</div>/
-            <div class="large">الاشتراكات</div>
+            <div class="large">التقيمات</div>
         </div>
 
         <div class="bar-obtions d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
             <div class="row flex-fill g-3">
                 <div class="d-flex align-items-center gap-2 mt-2">
-                    <a href="{{ route('dashboard.enrollments.index') }}" class="main-btn btn-main-color">الكل :
+                    <a href="{{ route('dashboard.reviews.index') }}" class="main-btn btn-main-color">الكل :
                         {{ $count_all }}</a>
-                    <a href="{{ route('dashboard.enrollments.index', ['status' => 'yes']) }}"
+                    <a href="{{ route('dashboard.reviews.index', ['status' => 'yes']) }}"
                         class="main-btn btn-sm bg-success">مفعلين : {{ $count_active }}</a>
-                    <a href="{{ route('dashboard.enrollments.index', ['status' => 'no']) }}"
+                    <a href="{{ route('dashboard.reviews.index', ['status' => 'no']) }}"
                         class="main-btn btn-sm  bg-danger">غير مفعلين : {{ $count_inactive }}</a>
-                    <a href="{{ route('dashboard.enrollments.export', [
+                    <a href="{{ route('dashboard.reviews.export', [
                         'course_id' => request('course_id'),
                         'student_id' => request('student_id'),
                         'status' => request('status'),
-                        'from' => request('from'),
-                        'to' => request('to'),
                     ]) }}"
                         class="main-btn btn-sm  bg-warning ">
                         <i class="fa-solid fa-file-excel fs-5"></i>تصدير Excel</a>
                 </div>
-                <form action="{{ route('dashboard.enrollments.index') }}" method="GET">
+                <form action="{{ route('dashboard.reviews.index') }}" method="GET">
                     <div class="row g-3">
                         <!-- فلتر القسم -->
                         <div class="col-3">
@@ -61,22 +59,6 @@
                                 </option>
                             </select>
                         </div>
-
-
-                        <div class="col-4">
-                            <div class="d-flex align-items-center gap-2">
-                                <label for="from"> من </label>
-                                <input class="form-control" type="datetime-local" id=""
-                                    value="{{ request('from') }}" name="from" />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="d-flex align-items-center gap-2">
-                                <label for="to"> الى </label>
-                                <input class="form-control" type="datetime-local" id="to"
-                                    value="{{ request('to') }}" name="to" />
-                            </div>
-                        </div>
                         <!-- زر البحث -->
                         <div class="col">
                             <button type="submit" class="btn btn-sm btn-primary">تصفية</button>
@@ -96,7 +78,8 @@
                         <th>الكورس</th>
                         <th>المعلم</th>
                         <th>الطالب</th>
-                        <th>السعر</th>
+                        <th>التقيم</th>
+                        <th>التعليق</th>
                         <th>الحالة</th>
                         <th>العمليات</th>
                     </tr>
@@ -115,26 +98,28 @@
                                 $student = App\Models\User::find($item->student_id);
                             @endphp
                             <td> {{ $student->name }}</td>
-                            <td> {{ $item->price }} $</td>
+                            <td> {{ $item->rate }} </td>
+                            <td> {{ $item->comment }} </td>
                             <td> <span
                                     class="badge {{ $item->status ? 'bg-success' : 'bg-danger' }}">{{ $item->status ? 'مفعل' : 'غير مفعل' }}</span>
                             </td>
                             <td>
                                 <div class="btn-holder d-flex align-items-center gap-3">
-                                    @can('update_enrollments')
+                                    @can('update_reviews')
                                         <button type="button" class="btn btn-primary btn-sm text-white" data-bs-toggle="modal"
                                             data-bs-target="#delete{{ $item->id }}">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>
                                     @endcan
                                 </div>
-                                @include('dashboard.enrollments.update-model', ['item' => $item])
+                                @include('dashboard.reviews.update-model', ['item' => $item])
                             </td>
                         </tr>
                     @endforeach
+
                     <tr>
-                        <td colspan="5" align="center">اجمالي </td>
-                        <td align="center">{{ $items->sum('price') }}</td>
+                        <td colspan="5" align="center">اجمالي التقييم </td>
+                        <td align="center">{{ $items->avg('rate') }}</td>
                     </tr>
                 </tbody>
             </table>

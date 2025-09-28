@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface EnrollmentInterface
+interface ReviewInterface
 {
     public function index();
     public function update($id, $data);

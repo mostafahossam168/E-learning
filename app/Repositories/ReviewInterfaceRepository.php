@@ -2,31 +2,23 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Facades\DB;
-use App\Interfaces\EnrollmentInterface;
-use App\Models\Course;
 use App\Models\User;
+use App\Models\Course;
+use Illuminate\Support\Facades\DB;
+use App\Interfaces\ReviewInterface;
 
-class EnrollmentInterfaceRepository implements EnrollmentInterface
+class ReviewInterfaceRepository implements ReviewInterface
 {
     public function index()
     {
         $status = request('status');
         $course_id = request('course_id');
         $student_id = request('student_id');
-        $from = request('from');
-        $to = request('to');
-        $items = DB::table('enrollments')->when($course_id, function ($q) use ($course_id) {
+        $items = DB::table('reviews')->when($course_id, function ($q) use ($course_id) {
             $q->where('course_id', $course_id);
         })
             ->when($student_id, function ($q) use ($student_id) {
                 $q->where('student_id', $student_id);
-            })
-            ->when($from, function ($q) use ($from) {
-                $q->where('created_at', '>=', $from);
-            })
-            ->when($to, function ($q) use ($to) {
-                $q->where('created_at', '<=', $to);
             })
             ->when($status, function ($q) use ($status) {
                 if ($status == 'yes') {
@@ -37,9 +29,9 @@ class EnrollmentInterfaceRepository implements EnrollmentInterface
                 }
             })->latest()->paginate(30);
 
-        $count_all = DB::table('enrollments')->count();
-        $count_active = DB::table('enrollments')->where('status', 1)->count();
-        $count_inactive = DB::table('enrollments')->where('status', 0)->count();
+        $count_all = DB::table('reviews')->count();
+        $count_active = DB::table('reviews')->where('status', 1)->count();
+        $count_inactive = DB::table('reviews')->where('status', 0)->count();
         $students = User::students()->select('id', 'name')->get();
         $courses = Course::select('id', 'title')->get();
         return [
@@ -52,8 +44,9 @@ class EnrollmentInterfaceRepository implements EnrollmentInterface
         ];
     }
 
+
     public function update($id, $data)
     {
-        DB::table('enrollments')->where('id', $id)->update(['status' => $data['status']]);
+        DB::table('reviews')->where('id', $id)->update(['status' => $data['status']]);
     }
 }

@@ -25,7 +25,7 @@ class CouponeRequest extends FormRequest
             case 'POST': {
                     return [
                         'code' => 'required|unique:coupones,code|digits:6',
-                        'course_id' => 'required|exists:courses,id',
+                        'course_id' => 'nullable|exists:courses,id',
                         'discount_type' => 'required|in:fixed,percentage',
                         'discount_value' => 'required',
                         'status' => 'required|boolean',
@@ -38,7 +38,7 @@ class CouponeRequest extends FormRequest
             case 'PATCH': {
                     return [
                         'code' => 'required|digits:6|unique:coupones,code,' . $this->coupone,
-                        'course_id' => 'required|exists:courses,id',
+                        'course_id' => 'nullable|exists:courses,id',
                         'discount_type' => 'required|in:fixed,percentage',
                         'discount_value' => 'required',
                         'status' => 'required|boolean',
