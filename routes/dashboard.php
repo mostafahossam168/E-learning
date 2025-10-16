@@ -9,11 +9,13 @@ use App\Http\Controllers\Dashboard\CouponeController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\EnrollmentController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\MessageController;
 use App\Http\Controllers\Dashboard\ReviewController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\StudentController;
 use App\Http\Controllers\Dashboard\TeacherController;
+use App\Livewire\Chat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -53,5 +55,8 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
         Route::get('/', 'index')->name('index');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/export', 'export')->name('export');
+    });
+    Route::controller(MessageController::class)->prefix('chats')->as('chats.')->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 });

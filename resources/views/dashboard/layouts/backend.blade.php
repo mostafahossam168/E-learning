@@ -21,7 +21,9 @@
         rel="stylesheet" />
     <link rel="shortcut icon" type="image/jpg" href="{{ display_file(setting('fav')) }}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @yield('css')
+    @yield('css').
+    @livewireStyles
+    {{-- @vite(['resources/js/app.js']) --}}
 </head>
 
 <body>
@@ -30,6 +32,7 @@
     <div class="app">
         @include('dashboard.layouts.sidebar')
         @yield('contant')
+        {{ $slot ?? '' }}
     </div>
     <!-- End layout -->
     <!-- Js Files -->
@@ -38,7 +41,35 @@
     <script src="{{ asset('dashboard/js/all.min.js') }}"></script>
     <script data-navigate-once src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('dashboard/js/main.js') }}"></script>
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+        // var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+        //     cluster: "{{ env('PUSHER_APP_CLUSTER') }}"
+        // });
+        // PUSHER_APP_ID = 2064298
+        // PUSHER_APP_KEY = 2 f781955a5e3c4f265c4
+        // PUSHER_APP_SECRET = e72864a77111725fd7cb
+        // PUSHER_HOST =
+        //     PUSHER_PORT = 443
+        // PUSHER_SCHEME = "https"
+        // PUSHER_APP_CLUSTER = "mt1"
+
+
+
+        var pusher = new Pusher("2f781955a5e3c4f265c4", {
+            cluster: "mt1"
+        });
+
+
+        var channel = pusher.subscribe('chat-message');
+        channel.bind('message-sent', function(data) {
+            Livewire.dispatch('refreshChat');
+        });
+    </script>
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>

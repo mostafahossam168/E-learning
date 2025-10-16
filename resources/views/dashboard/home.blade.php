@@ -54,11 +54,7 @@
                 <div class="large">
                     لوحة التحكم </div>
             </div>
-
-
-
         </div>
-
         @can('read_statistics_home')
             <div class="row g-3 mb-2">
                 @can('read_admins')
