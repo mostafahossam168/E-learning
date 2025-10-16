@@ -32,15 +32,19 @@
                     </div>
                     <div class="d-flex align-items-center gap-2rem">
                         <div class="dropdown icon-nav">
-                            <div class="main-badge badge-info">0</div>
-                            <button class="dropdown-toggle icon-nav" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            @php
+                                $conversation = App\Models\Conversation::where(function ($q) {
+                                    $q->where('user_one_id', auth()->id())->orWhere('user_two_id', auth()->id());
+                                })
+                                    ->whereHas('messages', function ($q) {
+                                        $q->where('is_read', false)->where('sender_id', '!=', auth()->id());
+                                    })
+                                    ->count();
+                            @endphp
+                            <div class="main-badge badge-info " id="count-converstion-icon">{{ $conversation }}</div>
+                            <a class="dropdown-toggle icon-nav" t href="{{ route('dashboard.chats.index') }}">
                                 <img src="{{ asset('dashboard/img/icons/msg.svg') }}" alt="" class="icon" />
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#"></a></li>
-                                <li></li>
-                            </ul>
+                            </a>
                         </div>
                         <div class="dropdown icon-nav">
                             <div class="main-badge">0</div>

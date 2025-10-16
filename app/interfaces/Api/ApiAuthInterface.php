@@ -11,4 +11,5 @@ interface ApiAuthInterface
     public function sendOtp(array $data, int $minutes = 5);
     public function verifyOtp(array $data);
     public function deleteOtp($id);
+    public function logout($token);
 }

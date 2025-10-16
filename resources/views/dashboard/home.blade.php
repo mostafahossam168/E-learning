@@ -55,6 +55,12 @@
                     لوحة التحكم </div>
             </div>
         </div>
+
+
+        {{-- @can('show-room_home') --}}
+        <div class="holder-boxs d-flex align-items-center flex-wrap flex-grow-1 gap-1 admin-online">
+        </div>
+        {{-- @endcan --}}
         @can('read_statistics_home')
             <div class="row g-3 mb-2">
                 @can('read_admins')

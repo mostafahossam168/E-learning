@@ -3,6 +3,7 @@
 namespace App\Repositories\Api;
 
 use App\Interfaces\Api\ApiAuthInterface;
+use App\Models\FcmToken;
 use App\Models\Otp;
 use App\Models\User;
 
@@ -10,7 +11,12 @@ class ApiAuthInterfaceRepository implements ApiAuthInterface
 {
     public function register($data)
     {
-        return User::create($data);
+        $user = User::create($data);
+        FcmToken::create([
+            'user_id' => $user->id,
+            'token' => $data['token']
+        ]);
+        return $user;
     }
 
     public function user($phone)
@@ -48,5 +54,14 @@ class ApiAuthInterfaceRepository implements ApiAuthInterface
     {
         $otp = Otp::find($id);
         $otp->delete();
+    }
+
+
+    public function logout($token)
+    {
+        $user = auth('sanctum')->user();
+        $user->tokens()->delete();
+        $user->fcmTokens()->where('token', $token)->delete();
+        return  $user->delete();
     }
 }

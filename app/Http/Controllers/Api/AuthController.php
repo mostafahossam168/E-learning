@@ -55,13 +55,18 @@ class AuthController extends Controller
         $data =   $request->validate([
             'phone' => 'required|string',
             'code'  => 'required|string',
+            'token' => 'required|string',
         ]);
         $check_code = $this->itemRepository->verifyOtp($data);
         if (! $check_code) {
             return $this->returnError('الكود غير صحيح أو منتهي', 422);
         }
         $this->itemRepository->deleteOtp($check_code->id);
-        $user =  $this->itemRepository->user($request->phone);;
+        $user =  $this->itemRepository->user($request->phone);
+        //Update Or create Token
+        if (!$user->fcmTokens()->where('token', $request->token)->exists()) {
+            $user->fcmTokens()->create(['token' => $request->token]);
+        }
         $token = $user->createToken('api')->plainTextToken;
         $data = ['token' => $token, 'user' => new UserResource($user)];
         return $this->returnData($data, 'تم تسجيل الدخول بنجاح');
@@ -94,9 +99,14 @@ class AuthController extends Controller
         $this->itemRepository->updateProfile($validated);
         return $this->returnData(new UserResource($user));
     }
-    public function logout()
+    public function logout(Request $request)
     {
-        auth('sanctum')->user()->tokens()->delete();
+        $request->validate(
+            [
+                'token' => 'required|string'
+            ]
+        );
+        $this->itemRepository->logout($request->token);
         return $this->returnSuccessMessage('تم  تسجيل الخروج بنجاح');
     }
 }

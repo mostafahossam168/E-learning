@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'phone' => ['required', 'string', 'unique:users,phone', 'regex:/^(?:\+20|0)?1[0125][0-9]{8}$/'],
             'image' => 'nullable|image|mimes:png,jpg|max:1024',
+            'token' => 'required|string',
             'password' => 'required|string|min:4|confirmed',
         ];
     }

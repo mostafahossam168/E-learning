@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Events\MessageSent;
 use App\Models\User;
 use App\Models\Message;
 use Livewire\Component;
 use App\Models\Conversation;
+use App\Services\FCMClient;
 use Livewire\WithFileUploads;
 
 class Chat extends Component
@@ -100,6 +102,17 @@ class Chat extends Component
             'type' => $type,
         ]);
 
+        //Real Time Teacher or Admin
+        $user = User::with('fcmTokens')->find($id);
+        if ($user->type->value == 'admin' || $user->type->value == 'teacher') {
+            event(new MessageSent($message));
+        } else {
+            $tokens = $user->fcmTokens ?? [];
+            foreach ($tokens as $token) {
+                FCMClient::send($token, $message, $message);
+            }
+        }
+
         $this->reset(['message', 'file']);
         $this->showConversation($conversation->id);
     }
@@ -129,6 +142,8 @@ class Chat extends Component
                     });
                 });
             })
+            ->withMax('messages', 'created_at') // <-- دي السطر المهم
+            ->orderByDesc('messages_max_created_at')
             ->get();
 
         $contactedUserIds = Conversation::with(['messages', 'userTwo', 'userOne'])

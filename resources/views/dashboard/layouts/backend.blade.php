@@ -21,9 +21,9 @@
         rel="stylesheet" />
     <link rel="shortcut icon" type="image/jpg" href="{{ display_file(setting('fav')) }}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @yield('css').
+    @vite('resources/js/app.js')
+    @yield('css')
     @livewireStyles
-    {{-- @vite(['resources/js/app.js']) --}}
 </head>
 
 <body>
@@ -66,6 +66,15 @@
         var channel = pusher.subscribe('chat-message');
         channel.bind('message-sent', function(data) {
             Livewire.dispatch('refreshChat');
+            //Update Icon
+            fetch("{{ route('dashboard.unread-count') }}")
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('count-converstion-icon');
+                    if (el) {
+                        el.textContent = data.count;
+                    }
+                });
         });
     </script>
     @stack('scripts')

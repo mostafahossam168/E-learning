@@ -59,4 +59,19 @@ Route::group(['middleware' => ['auth', 'check_admin', 'check_active']], function
     Route::controller(MessageController::class)->prefix('chats')->as('chats.')->group(function () {
         Route::get('/', 'index')->name('index');
     });
+
+
+
+    Route::get('/unread-count', function () {
+        $count = \App\Models\Conversation::where(function ($q) {
+            $q->where('user_one_id', auth()->id())
+                ->orWhere('user_two_id', auth()->id());
+        })
+            ->whereHas('messages', function ($q) {
+                $q->where('is_read', false)
+                    ->where('sender_id', '!=', auth()->id());
+            })
+            ->count();
+        return response()->json(['count' => $count]);
+    })->name('unread-count');
 });

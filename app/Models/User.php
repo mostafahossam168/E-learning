@@ -55,6 +55,13 @@ class User extends Authenticatable
         return $q->where('type', TypeUser::STUDENT);
     }
 
+
+    public function fcmTokens()
+    {
+        return $this->hasMany(FcmToken::class);
+    }
+
+
     public function teacherCourses()
     {
         return $this->hasMany(Course::class, 'teacher_id');
